@@ -1,6 +1,6 @@
 {
-  "homepage": "https://duow2208.github.io/Happy-Birthday-NPTH",
   "name": "birthday",
+  "homepage": "https://duow2208.github.io/Happy-NPTH",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -10,8 +10,7 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist"
-
+    "deploy": "gh-pages -d build"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.10",
