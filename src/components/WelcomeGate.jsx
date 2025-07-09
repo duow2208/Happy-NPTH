@@ -1,23 +1,24 @@
 import React, { useRef, useState } from "react";
 import "./BubbleEffect.css";
+// Thêm font đẹp nếu có thể, ví dụ: 'Pacifico', 'Dancing Script'
 
 const bubbleColors = [
-  "bg-yellow-400",
-  "bg-pink-400",
-  "bg-cyan-400",
-  "bg-yellow-200",
-  "bg-lime-200",
+  "bg-yellow-400/70",
+  "bg-pink-400/70",
+  "bg-cyan-400/70",
+  "bg-yellow-200/60",
+  "bg-lime-200/60",
 ];
 
 const textColors = [
-  "text-yellow-400",
-  "text-pink-400",
-  "text-cyan-400",
-  "text-lime-400",
-  "text-purple-400",
-  "text-orange-400",
-  "text-blue-400",
-  "text-red-400",
+  "text-yellow-300",
+  "text-pink-300",
+  "text-cyan-300",
+  "text-lime-300",
+  "text-purple-300",
+  "text-orange-300",
+  "text-blue-300",
+  "text-red-300",
 ];
 
 const messages = [
@@ -43,6 +44,7 @@ export default function WelcomeGate({ onReady }) {
   const [bubbles, setBubbles] = useState([]);
   const [hidden, setHidden] = useState(false);
   const [showBirthdayText, setShowBirthdayText] = useState(false);
+  const [visibleMessageCount, setVisibleMessageCount] = useState(0);
   const gateRef = useRef();
 
   function handleReady(e) {
@@ -63,7 +65,13 @@ export default function WelcomeGate({ onReady }) {
     });
     setBubbles(newBubbles);
     setShowBirthdayText(true);
-
+    setVisibleMessageCount(0);
+    // Hiện lần lượt từng dòng chữ
+    messages.forEach((_, idx) => {
+      setTimeout(() => {
+        setVisibleMessageCount((prev) => prev + 1);
+      }, idx * 250); // mỗi dòng hiện cách nhau 250ms
+    });
     setTimeout(() => {
       setHidden(true);
       setTimeout(onReady, 1000);
@@ -73,30 +81,29 @@ export default function WelcomeGate({ onReady }) {
   return (
     <div
       ref={gateRef}
-      className={`fixed inset-0 bg-black flex flex-col items-center justify-center text-white transition-opacity duration-1000 z-40
+      className={`fixed inset-0 flex flex-col items-center justify-center transition-opacity duration-1000 z-40 overflow-hidden
         ${hidden ? "opacity-0 pointer-events-none" : "opacity-100"}
       `}
+      style={{
+        background: "radial-gradient(ellipse at 50% 40%, #222 60%, #111 100%)",
+      }}
     >
+      {/* Hiệu ứng nền động */}
+      <div className="absolute inset-0 -z-10 animate-gradient-move bg-gradient-to-br from-pink-400 via-yellow-300 to-cyan-400 opacity-30 blur-2xl" />
       {/* Rotating Birthday Texts */}
       {showBirthdayText && (
-        <div className="fixed inset-0 pointer-events-none z-50">
-          {messages.map((message, index) => {
-            const angle = (index * 360) / messages.length;
-            const delay = index * 0.15;
+        <div className="fixed inset-0 flex flex-col items-center justify-center pointer-events-none z-50 gap-2">
+          {messages.slice(0, visibleMessageCount).map((message, index) => {
             const color = textColors[index % textColors.length];
-            const size = index % 3 === 0 ? "text-4xl" : index % 3 === 1 ? "text-3xl" : "text-2xl";
-            const animationType = index % 2 === 0 ? "animate-spin-slow" : "animate-diagonal";
-            
+            const size = index % 3 === 0 ? "text-5xl md:text-6xl" : index % 3 === 1 ? "text-4xl md:text-5xl" : "text-3xl md:text-4xl";
             return (
               <div
                 key={index}
-                className={`absolute ${color} ${size} font-bold ${animationType}`}
+                className={`transition-all duration-500 ease-out opacity-100 scale-100 ${color} ${size} font-bold drop-shadow-glow text-shadow-glow select-none animate-pop-in`}
                 style={{
-                  left: "50%",
-                  top: "50%",
-                  transform: `rotate(${angle}deg) translate(40vh) rotate(-${angle}deg)`,
-                  animationDelay: `${delay}s`,
-                  animationDuration: index % 2 === 0 ? "12s" : "8s",
+                  filter: "drop-shadow(0 0 12px #fff) drop-shadow(0 0 24px #f9d)",
+                  fontFamily: 'Dancing Script, Pacifico, cursive',
+                  marginBottom: 4,
                 }}
               >
                 {message}
@@ -105,35 +112,34 @@ export default function WelcomeGate({ onReady }) {
           })}
         </div>
       )}
-      
       {/* Bong bóng hiệu ứng */}
-      <div className="fixed inset-0 pointer-events-none z-50">
+      <div className="fixed inset-0 pointer-events-none z-40">
         {bubbles.map((b, i) => (
           <div
             key={b.id}
-            className={`absolute ${b.color} opacity-90 pointer-events-none bubble-anim`}
+            className={`absolute ${b.color} opacity-70 pointer-events-none bubble-anim shadow-xl`}
             style={{
               width: b.size,
               height: b.size,
               left: b.left,
               top: b.top,
               borderRadius: "9999px",
-              zIndex: 50,
+              zIndex: 40,
               animationDelay: `${i * 0.05}s`,
-              transform: `rotate(${b.spin}deg)`,
+              transform: `rotate(${b.spin}deg)`
             }}
           />
         ))}
       </div>
       {/* Nội dung Welcome Gate */}
-      <div className="text-2xl md:text-3xl font-semibold mb-8 text-center tracking-wide">
-        Hôm nay là một ngày đặc biệt.
-        <br />
+      <div className="relative text-2xl md:text-4xl font-semibold mb-10 text-center tracking-wide text-white drop-shadow-lg" style={{fontFamily: 'Dancing Script, Pacifico, cursive'}}>
+        Hôm nay là một ngày đặc biệt.<br />
         Em đã sẵn sàng nhận điều bất ngờ chưa?
       </div>
       <button
         onClick={handleReady}
-        className="bg-yellow-400 text-black rounded-full px-8 py-4 font-bold text-lg shadow-lg hover:scale-105 active:scale-95 transition-all duration-150 flex items-center gap-2"
+        className="bg-yellow-400 text-black rounded-full px-10 py-5 font-bold text-2xl shadow-2xl border-4 border-pink-300 hover:border-cyan-300 hover:shadow-pink-200/60 hover:scale-110 active:scale-95 transition-all duration-200 flex items-center gap-3 focus:outline-none focus:ring-4 focus:ring-pink-200 animate-glow"
+        style={{fontFamily: 'Dancing Script, Pacifico, cursive', boxShadow: '0 0 24px #f9d, 0 0 48px #fff8'}}
       >
         Em đã sẵn sàng <span role="img" aria-label="gift">🎁</span>
       </button>

@@ -17,7 +17,7 @@ export default function AudioPlayer({ isPlaying }) {
   return (
     <audio
       ref={audioRef}
-      src="./public/SinhNhatCuaXinhNhat-24kRightHIEUTHUHAIHipz-12294375.mp3"
+      src={`${import.meta.env.BASE_URL}SinhNhatCuaXinhNhat-24kRightHIEUTHUHAIHipz-12294375.mp3`}
       loop
       className="hidden"
     />

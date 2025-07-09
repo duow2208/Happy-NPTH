@@ -2,13 +2,14 @@
 import React, { useState } from "react";
 
 const CARDS = [
-  { msg: "Chúc em nhận được thật nhiều niềm vui 🎈" },
-  { msg: "Một năm học tập và làm việc rực rỡ!" },
-  { msg: "Quà này là một cái ôm ảo nhé 🤗" },
-  { msg: "Bí mật: Tối nay có người rủ đi chơi đó!" },
-  { msg: "Em được cộng thêm 1 năm yêu thương 🥳" },
-  { msg: "Nhớ luôn cười thật tươi nhé 😁" },
+  { msg: "Chúc em một sinh nhật thật hạnh phúc và tràn ngập yêu thương 🎉" },
+  { msg: "Tuổi mới đến rồi, mong em luôn mạnh khỏe, bình an và thành công 🌟" },
+  { msg: "Cảm ơn vì đã đến với thế giới này – chúc em luôn rạng rỡ như ánh mặt trời ☀️" },
+  { msg: "Sinh nhật là dịp để yêu thương nhiều hơn – chúc em nhận được thật nhiều điều tốt đẹp 💖" },
+  { msg: "Thêm tuổi mới, thêm trưởng thành – chúc em luôn vững vàng trên hành trình của mình 🚀" },
+  { msg: "Một năm tuyệt vời đang chờ phía trước – hãy đón nhận nó bằng nụ cười thật tươi nhé 😄" },
 ];
+
 
 export default function MiniGames({ onNext }) {
   const [flipped, setFlipped] = useState(Array(6).fill(false));
